@@ -84,10 +84,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "ctrl+c", "q":
+			close(m.resultChan)
 			return m, tea.Quit
 		case "t":
 			if !m.testing {
 				m.testing = true
+				m.results = []TestResult{}
+				m.resultChan = make(chan TestResult, len(m.servers))
 				return m, runTests(m.servers, m.resultChan)
 			}
 		}
@@ -141,11 +144,26 @@ func (m Model) View() string {
 
 	if m.testing {
 		s.WriteString(m.spinner.View() + " Running tests...\n\n")
+	} else if len(m.results) > 0 {
+		s.WriteString("✨ Tests complete!\n")
+		s.WriteString("Press 't' to run tests again, or 'q' to quit\n\n")
 	} else {
 		s.WriteString("Press 't' to start tests, 'q' to quit\n\n")
 	}
 
 	s.WriteString(style.Render(m.table.View()) + "\n")
+	// Add summary if tests are complete
+	if len(m.results) > 0 && !m.testing {
+		successCount := 0
+		for _, r := range m.results {
+			if r.Success {
+				successCount++
+			}
+		}
+		s.WriteString(fmt.Sprintf("\nSummary: %d/%d tests passed\n",
+			successCount, len(m.results)))
+	}
+
 	return s.String()
 }
 
@@ -165,7 +183,6 @@ func runTests(servers []Server, resultChan chan TestResult) tea.Cmd {
 		// Close results channel after all tests complete
 		go func() {
 			wg.Wait()
-			close(resultChan)
 		}()
 
 		if result, ok := <-resultChan; ok {

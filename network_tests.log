@@ -152,3 +152,129 @@ PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
 rtt min/avg/max/mdev = 0.012/0.026/0.061/0.019 ms, ipg/ewma 0.059/0.042 ms
 
 ---
+[2024-12-08T23:47:54Z] Server: Site1, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.097 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.031 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.012 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.010 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.012 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.010/0.032/0.097/0.033 ms, ipg/ewma 0.069/0.063 ms
+
+---
+[2024-12-08T23:47:54Z] Server: Site2, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.056 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.017 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.014 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.013 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.013 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.013/0.022/0.056/0.016 ms, ipg/ewma 0.057/0.038 ms
+
+---
+[2024-12-08T23:48:14Z] Server: Site1, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.054 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.009 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.007 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.007 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.007 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.007/0.016/0.054/0.018 ms, ipg/ewma 0.037/0.034 ms
+
+---
+[2024-12-08T23:50:22Z] Server: Site2, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.073 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.035 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.028 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.012 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.013 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.012/0.032/0.073/0.022 ms, ipg/ewma 0.062/0.051 ms
+
+---
+[2024-12-08T23:50:22Z] Server: Site1, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.040 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.023 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.008 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.007 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.007 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.007/0.017/0.040/0.013 ms, ipg/ewma 0.045/0.028 ms
+
+---
+[2024-12-09T00:21:54Z] Server: Site1, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.044 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.016 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.014 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.011 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.015 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.011/0.020/0.044/0.012 ms, ipg/ewma 0.042/0.031 ms
+
+---
+[2024-12-09T00:21:54Z] Server: Site2, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.088 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.026 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.009 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.008 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.010 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.008/0.028/0.088/0.030 ms, ipg/ewma 0.053/0.056 ms
+
+---
+[2024-12-09T00:21:58Z] Server: Site1, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.060 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.015 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.010 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.010 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.010 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.010/0.021/0.060/0.019 ms, ipg/ewma 0.048/0.039 ms
+
+---
+[2024-12-09T00:21:58Z] Server: Site2, Target: 10.1.0.1, Success: true
+Output:
+PING 10.1.0.1 (10.1.0.1) 72(100) bytes of data.
+80 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.090 ms
+80 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.017 ms
+80 bytes from 10.1.0.1: icmp_seq=3 ttl=64 time=0.012 ms
+80 bytes from 10.1.0.1: icmp_seq=4 ttl=64 time=0.012 ms
+80 bytes from 10.1.0.1: icmp_seq=5 ttl=64 time=0.012 ms
+
+--- 10.1.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.012/0.028/0.090/0.030 ms, ipg/ewma 0.058/0.058 ms
+
+---
