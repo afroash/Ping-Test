@@ -11,6 +11,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/spinner"
 	"github.com/charmbracelet/bubbles/table"
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"golang.org/x/crypto/ssh"
@@ -39,6 +40,9 @@ type Model struct {
 	testing    bool
 	err        error
 	resultChan chan TestResult
+	textInput  textinput.Model
+	inputting  bool
+	targetIP   string
 }
 
 var style = lipgloss.NewStyle().
@@ -63,6 +67,13 @@ func initialModel() Model {
 		table.WithWidth(72),
 	)
 
+	//text input initialization
+	ti := textinput.New()
+	ti.Placeholder = "Enter target IP(e.g., 8.8.8.8)"
+	ti.Focus()
+	ti.CharLimit = 15
+	ti.Width = 30
+
 	return Model{
 		spinner: s,
 		table:   t,
@@ -71,6 +82,8 @@ func initialModel() Model {
 			{"Site2", "192.168.121.102", "admin", "admin"},
 		},
 		resultChan: make(chan TestResult, 10),
+		textInput:  ti,
+		inputting:  false,
 	}
 
 }
@@ -87,11 +100,27 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			close(m.resultChan)
 			return m, tea.Quit
 		case "t":
-			if !m.testing {
-				m.testing = true
-				m.results = []TestResult{}
-				m.resultChan = make(chan TestResult, len(m.servers))
-				return m, runTests(m.servers, m.resultChan)
+			if !m.testing && !m.inputting {
+				m.inputting = true
+				m.textInput.Focus()
+				return m, textinput.Blink
+			}
+		case "enter":
+			if m.inputting {
+				if m.textInput.Value() != "" {
+					m.targetIP = m.textInput.Value()
+					m.inputting = false
+					m.testing = true
+					m.results = []TestResult{}
+					m.resultChan = make(chan TestResult, len(m.servers))
+					return m, runTests(m.servers, m.resultChan, m.targetIP)
+				}
+			}
+		case "esc":
+			if m.inputting {
+				m.inputting = false
+				m.textInput.Blur()
+				return m, nil
 			}
 		}
 
@@ -130,6 +159,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.spinner, cmd = m.spinner.Update(msg)
 		return m, cmd
 	}
+	if m.inputting {
+		var cmd tea.Cmd
+		m.textInput, cmd = m.textInput.Update(msg)
+		return m, cmd
+	}
 
 	return m, nil
 }
@@ -142,9 +176,15 @@ func (m Model) View() string {
 	var s strings.Builder
 	s.WriteString("\n  🌐 Network Connectivity Tester\n\n")
 
-	if m.testing {
+	if m.inputting {
+		s.WriteString("Enter target IP for ping tests:\n")
+		s.WriteString(m.textInput.View() + "\n")
+		s.WriteString("\n(Press Enter to start, Esc to cancel)\n")
+	} else if m.testing {
+		s.WriteString(fmt.Sprintf("Target IP: %s\n", m.targetIP))
 		s.WriteString(m.spinner.View() + " Running tests...\n\n")
 	} else if len(m.results) > 0 {
+		s.WriteString(fmt.Sprintf("Target IP: %s\n", m.targetIP))
 		s.WriteString("✨ Tests complete!\n")
 		s.WriteString("Press 't' to run tests again, or 'q' to quit\n\n")
 	} else {
@@ -152,7 +192,7 @@ func (m Model) View() string {
 	}
 
 	s.WriteString(style.Render(m.table.View()) + "\n")
-	// Add summary if tests are complete
+
 	if len(m.results) > 0 && !m.testing {
 		successCount := 0
 		for _, r := range m.results {
@@ -167,7 +207,7 @@ func (m Model) View() string {
 	return s.String()
 }
 
-func runTests(servers []Server, resultChan chan TestResult) tea.Cmd {
+func runTests(servers []Server, resultChan chan TestResult, targetIP string) tea.Cmd {
 	return func() tea.Msg {
 		var wg sync.WaitGroup
 
@@ -175,7 +215,7 @@ func runTests(servers []Server, resultChan chan TestResult) tea.Cmd {
 			wg.Add(1)
 			go func(srv Server) {
 				defer wg.Done()
-				result := testServer(srv)
+				result := testServer(srv, targetIP)
 				resultChan <- result
 			}(server)
 		}
@@ -206,7 +246,7 @@ func (m Model) Exit() {
 	close(m.resultChan)
 }
 
-func testServer(server Server) TestResult {
+func testServer(server Server, targetIP string) TestResult {
 
 	config := &ssh.ClientConfig{
 		User: server.User,
@@ -253,15 +293,15 @@ func testServer(server Server) TestResult {
 	session.Stdout = &outBuf
 
 	// Example ping test (adjust target as needed)
-	target := "10.1.0.1" // Example target
-	err = session.Run(fmt.Sprintf("ping %s", target))
+	//target := "10.1.0.1" // Example target
+	err = session.Run(fmt.Sprintf("ping %s", targetIP))
 
 	success := err == nil && !strings.Contains(outBuf.String(), "100% packet loss")
 
 	// Save results to file
 	logResult(TestResult{
 		Server:    server.Name,
-		Target:    target,
+		Target:    targetIP,
 		Success:   success,
 		Output:    outBuf.String(),
 		Timestamp: time.Now(),
@@ -269,7 +309,7 @@ func testServer(server Server) TestResult {
 
 	return TestResult{
 		Server:    server.Name,
-		Target:    target,
+		Target:    targetIP,
 		Success:   success,
 		Output:    outBuf.String(),
 		Timestamp: time.Now(),
