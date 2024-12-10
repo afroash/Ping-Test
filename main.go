@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -78,8 +77,10 @@ func initialModel() Model {
 		spinner: s,
 		table:   t,
 		servers: []Server{
-			{"Site1", "192.168.121.101", "admin", "admin"},
-			{"Site2", "192.168.121.102", "admin", "admin"},
+			//{"Router1", "192.168.121.101", "admin", "admin"},
+			//{"Router2", "192.168.121.102", "admin", "admin"},
+			{"Server1", "192.168.121.104", "root", "admin"},
+			{"Server2", "192.168.121.105", "root", "admin"},
 		},
 		resultChan: make(chan TestResult, 10),
 		textInput:  ti,
@@ -289,21 +290,22 @@ func testServer(server Server, targetIP string) TestResult {
 	}
 	defer session.Close()
 
-	var outBuf bytes.Buffer
-	session.Stdout = &outBuf
+	//var outBuf bytes.Buffer
+	//session.Stdout = &outBuf
 
 	// Example ping test (adjust target as needed)
 	//target := "10.1.0.1" // Example target
-	err = session.Run(fmt.Sprintf("ping %s", targetIP))
+	//err = session.Run(fmt.Sprintf("ping %s", targetIP))
+	output, err := session.CombinedOutput("ping -c 3 " + targetIP)
 
-	success := err == nil && !strings.Contains(outBuf.String(), "100% packet loss")
+	success := err == nil && !strings.Contains(string(output), "100% packet loss")
 
 	// Save results to file
 	logResult(TestResult{
 		Server:    server.Name,
 		Target:    targetIP,
 		Success:   success,
-		Output:    outBuf.String(),
+		Output:    string(output),
 		Timestamp: time.Now(),
 	})
 
@@ -311,7 +313,7 @@ func testServer(server Server, targetIP string) TestResult {
 		Server:    server.Name,
 		Target:    targetIP,
 		Success:   success,
-		Output:    outBuf.String(),
+		Output:    string(output),
 		Timestamp: time.Now(),
 	}
 }
