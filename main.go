@@ -14,13 +14,18 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"golang.org/x/crypto/ssh"
+	"gopkg.in/yaml.v2"
 )
 
 type Server struct {
-	Name     string
-	Host     string
-	User     string
-	Password string
+	Name     string `yaml:"name"`
+	Host     string `yaml:"host"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+}
+
+type Config struct {
+	Servers []Server `yaml:"servers"`
 }
 
 type TestResult struct {
@@ -73,20 +78,36 @@ func initialModel() Model {
 	ti.CharLimit = 15
 	ti.Width = 30
 
+	//get servers from yaml file
+	servers, err := getServerDetails("servers.yaml")
+	if err != nil {
+		log.Fatalf("Error reading server details: %v", err)
+	}
+
 	return Model{
-		spinner: s,
-		table:   t,
-		servers: []Server{
-			//{"Router1", "192.168.121.101", "admin", "admin"},
-			//{"Router2", "192.168.121.102", "admin", "admin"},
-			{"Server1", "192.168.121.104", "root", "admin"},
-			{"Server2", "192.168.121.105", "root", "admin"},
-		},
+		spinner:    s,
+		table:      t,
+		servers:    servers,
 		resultChan: make(chan TestResult, 10),
 		textInput:  ti,
 		inputting:  false,
 	}
 
+}
+
+// get server details from yaml file
+func getServerDetails(filename string) ([]Server, error) {
+	//var servers []Server
+	config := Config{}
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	err = yaml.Unmarshal(data, &config)
+	if err != nil {
+		return nil, err
+	}
+	return config.Servers, nil
 }
 
 func (m Model) Init() tea.Cmd {
