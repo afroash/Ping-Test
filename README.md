@@ -4,8 +4,8 @@ This tool allows you to test network connectivity to various servers by performi
 
 ### Features
 
-- Connects to multiple servers via SSH
-- Executes ping tests to a specified target IP
+- Connects to multhostle servers via SSH
+- Executes ping tests to a specified target host
 - Displays results in a table format
 - Logs results to a file (`network_tests.log`)
 
@@ -22,19 +22,19 @@ This tool allows you to test network connectivity to various servers by performi
     ```yaml
     servers:
       - name: "Server1"
-        ip: "192.168.121.101"
+        host: "192.168.121.101"
         user: "admin"
         password: "admin"
       - name: "Server2"
-        ip: "192.168.121.102"
+        host: "192.168.121.102"
         user: "admin"
         password: "admin"
       - name: "Server3"
-        ip: "192.168.121.104"
+        host: "192.168.121.104"
         user: "root"
         password: "admin"
       - name: "Server4"
-        ip: "192.168.121.105"
+        host: "192.168.121.105"
         user: "root"
         password: "admin"
     ```
@@ -45,13 +45,13 @@ This tool allows you to test network connectivity to various servers by performi
     go run main.go
     ```
 
-4. Follow the on-screen instructions to enter the target IP for the ping tests.
+4. Follow the on-screen instructions to enter the target host for the ping tests.
 
 ### Dependencies
 
 - [github.com/charmbracelet/bubbles](https://github.com/charmbracelet/bubbles)
 - [github.com/charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea)
-- [github.com/charmbracelet/lipgloss](https://github.com/charmbracelet/lipgloss)
+- [github.com/charmbracelet/lhostgloss](https://github.com/charmbracelet/lhostgloss)
 - [golang.org/x/crypto](https://pkg.go.dev/golang.org/x/crypto)
 - [gopkg.in/yaml.v2](https://gopkg.in/yaml.v2)
 

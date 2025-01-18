@@ -311,12 +311,6 @@ func testServer(server Server, targetIP string) TestResult {
 	}
 	defer session.Close()
 
-	//var outBuf bytes.Buffer
-	//session.Stdout = &outBuf
-
-	// Example ping test (adjust target as needed)
-	//target := "10.1.0.1" // Example target
-	//err = session.Run(fmt.Sprintf("ping %s", targetIP))
 	output, err := session.CombinedOutput("ping -c 3 " + targetIP)
 
 	success := err == nil && !strings.Contains(string(output), "100% packet loss")
